@@ -1,0 +1,6 @@
+{
+  "summary": "Rencana Implementasi Penyesuaian Koordinat Denah Awal Terkunci:\n- Mengubah posisi KT 2 ke Y: 2.5 - 6.0m (kedalaman 3.5m)\n- Mengubah posisi KT 1 ke Y: 6.0 - 9.0m (kedalaman 3.0m)\n- Mengubah posisi Ruang Keluarga ke Y: 3.0 - 9.0m (kedalaman 6.0m)\n- Menyesuaikan Carport Depan KT 2 ke Y: 0.0 - 2.5m (sisa depan 2.5m)\n- Menyesuaikan Teras Santai Depan RK ke Y: 0.0 - 3.0m (sisa depan 3.0m)\n- Menyesuaikan Taman Void Belakang KT 1 ke Y: 9.0 - 11.0m (sisa belakang 2.0m)\n- Menyesuaikan Ruang Makan Belakang RK ke Y: 9.0 - 11.0m (sisa belakang 2.0m)\n- Memperbarui Zona Terlarang Dak Lantai 2 dan tata letak perabot yang sesuai",
+  "updatedAt": "2026-11-05T08:08:08.753592223Z",
+  "requestFeedback": true,
+  "userFacing": true
+}

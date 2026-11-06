@@ -1,0 +1,1178 @@
+# MASTER DEVELOPMENT PROMPT — ADVANCED ARCHITECTURAL DESIGN, FURNITURE & INTERIOR PLANNER
+
+## PROJECT CONTEXT
+
+Continue developing the existing Interactive Architectural Design application in this Gemini conversation.
+
+The existing approved house design is the single source of truth.
+
+The goal is to transform the current application into a comprehensive architectural design and interior planning tool with advanced building geometry editing, floor-based visibility, custom furniture, built-in furniture, synchronized 2D and 3D editing, and functional interior walkthrough.
+
+IMPORTANT:
+- Do not generate a new house design.
+- Do not replace the existing approved floor plan.
+- Do not create a separate generic house planner.
+- Do not remove existing working functionality.
+- Preserve all existing project data and dimensions.
+- Keep the original approved design as an immutable baseline.
+- Perform all modifications in an editable working copy or alternative version.
+- Fix existing bugs at the data and interaction level, not just by adding visual controls.
+
+Before implementation, inspect the existing source code, data model, geometry system, furniture implementation, and 3D scene architecture.
+
+---
+
+# PART 1 — ADVANCED BUILDING GEOMETRY EDITOR
+
+## 1.1 Freeform Building Shapes
+
+The current building and room geometry is primarily rectangular.
+
+Upgrade it to support arbitrary polygon-based shapes.
+
+Users must be able to:
+- Add vertices to walls and building boundaries.
+- Delete vertices.
+- Move individual vertices.
+- Create new wall segments.
+- Delete wall segments.
+- Split and merge wall segments.
+- Create L-shaped, U-shaped, and irregular rooms.
+- Adjust wall angles and lengths.
+- Close polygons to create enclosed rooms.
+- Create door and window openings on wall segments.
+
+When a vertex or wall is modified:
+- Recalculate affected room geometry.
+- Update room areas and dimensions.
+- Update connected walls and intersections.
+- Update the corresponding 3D geometry.
+- Preserve furniture positions whenever possible.
+- Detect invalid, overlapping, or disconnected geometry.
+
+Do not allow accidental gaps in enclosed room boundaries without warning.
+
+## 1.2 Bidirectional Resizing
+
+The existing resize function only allows resizing toward the right and bottom.
+
+Fix this limitation.
+
+Allow resizing from:
+- Left edge.
+- Right edge.
+- Top edge.
+- Bottom edge.
+- All four corners.
+
+Provide two resize modes:
+
+**Fixed Opposite Edge**
+- Moving the left edge keeps the right edge fixed.
+- Moving the right edge keeps the left edge fixed.
+- Apply equivalent behavior to top and bottom edges.
+
+**Center-Based Resize**
+- Resize symmetrically around the object's center.
+
+For polygon-based geometry, allow direct vertex editing.
+
+Also provide:
+- Numeric width and depth inputs.
+- Numeric wall length inputs.
+- Dimension labels.
+- Grid snapping.
+- Alignment guides.
+- Undo and redo.
+- Geometry locking.
+- Minimum dimension constraints.
+
+Do not automatically shift an object after resizing unless the user explicitly requests repositioning.
+
+## 1.3 Wall and Room Editing
+
+Allow editing of:
+- Wall length.
+- Wall thickness.
+- Wall height.
+- Wall material.
+- Wall position.
+- Wall orientation.
+- Door openings.
+- Window openings.
+- Door and window dimensions.
+
+Shared walls must update consistently for both adjacent rooms.
+
+Warn users about invalid geometry, gaps, or overlaps.
+
+---
+
+# PART 2 — FLOOR-BASED FURNITURE VISIBILITY AND LAYER MANAGEMENT
+
+The current application displays furniture from multiple floors simultaneously, causing visual overlap.
+
+Implement a proper layer and visibility system.
+
+## 2.1 Floor Filters
+
+Provide:
+- Ground Floor.
+- Second Floor.
+- All Floors.
+
+When Ground Floor is selected, display only ground-floor furniture and relevant objects.
+
+When Second Floor is selected, display only second-floor furniture and relevant objects.
+
+When All Floors is selected, allow the user to inspect the complete building in dollhouse mode.
+
+Hiding a floor must not delete or modify its objects.
+
+## 2.2 Independent Visibility Controls
+
+Provide visibility toggles for:
+- All Furniture.
+- Beds.
+- Sofas.
+- Tables.
+- Chairs.
+- Wardrobes.
+- Kitchen Equipment.
+- Bathroom Fixtures.
+- Laundry Equipment.
+- Decorative Objects.
+- Doors.
+- Windows.
+- Walls.
+- Roof.
+- Staircase.
+- Restricted Zones.
+
+Users must be able to hide all furniture while retaining walls and building structure.
+
+Users must also be able to hide selected furniture categories independently.
+
+## 2.3 Room-Based Filtering
+
+Allow filtering by actual rooms in the existing house, such as:
+- Bedroom 1.
+- Bedroom 2.
+- Bedroom 3.
+- Guest Living Room.
+- Family Room.
+- Kitchen.
+- Dining Area.
+- Bathroom.
+- Laundry.
+- Balcony.
+
+Do not hardcode room names if the existing model already provides room data. Generate the room list dynamically.
+
+## 2.4 Object Layer Data
+
+Each object must have:
+- Unique object ID.
+- Floor ID.
+- Room ID, where applicable.
+- Category.
+- Visibility state.
+- Lock state.
+- Parent relationship, if applicable.
+
+Visibility filters must affect rendering only.
+
+The same visibility and floor settings should be reflected in both 2D and 3D views.
+
+---
+
+# PART 3 — CUSTOM FURNITURE GEOMETRY AND PARAMETRIC FURNITURE
+
+The existing furniture library mainly represents objects as rectangular boxes.
+
+Upgrade it to support realistic non-rectangular furniture footprints and editable 3D geometry.
+
+## 3.1 Parametric Furniture Library
+
+Include templates for:
+
+**Sofas**
+- Straight sofa.
+- L-shaped sofa.
+- U-shaped sofa.
+- Modular sectional sofa.
+- Corner sofa.
+
+**Tables**
+- Rectangular table.
+- Square table.
+- Round table.
+- Oval table.
+- Polygon-based custom table.
+
+**Kitchen**
+- Straight kitchen set.
+- L-shaped kitchen set.
+- U-shaped kitchen set.
+- Kitchen island.
+- Custom countertop.
+
+**Storage**
+- Straight wardrobe.
+- Corner wardrobe.
+- L-shaped storage.
+- Custom cabinets.
+
+**Other**
+- Beds.
+- Desks.
+- Chairs.
+- Shelves.
+- Bathroom fixtures.
+- Laundry equipment.
+
+## 3.2 Editable Furniture Parameters
+
+Each parametric item must expose appropriate dimensions and configuration.
+
+Example: L-shaped sofa:
+- Side A length.
+- Side B length.
+- Seat depth.
+- Backrest height.
+- Seat height.
+- Corner orientation.
+- Number of seats, where supported.
+
+Example: L-shaped kitchen:
+- Main counter length.
+- Secondary counter length.
+- Counter depth.
+- Counter height.
+- Cabinet configuration.
+- Sink and stove position.
+
+Dimensions must be editable in centimeters or meters.
+
+## 3.3 Custom Shape Editor
+
+Allow users to create custom furniture footprints.
+
+Users must be able to:
+- Add vertices.
+- Delete vertices.
+- Move vertices.
+- Edit dimensions numerically.
+- Rotate shapes.
+- Set object height.
+- Assign materials.
+- Create connected sections.
+- Save custom furniture as reusable templates.
+
+Support L-shaped, U-shaped, polygonal, and other irregular furniture.
+
+## 3.4 Furniture Movement
+
+Fix the existing furniture movement issue.
+
+All furniture must be:
+- Selectable.
+- Draggable.
+- Rotatable through 360 degrees.
+- Resizable.
+- Duplicatable.
+- Deletable.
+- Movable between rooms.
+- Independently lockable.
+
+Allow numeric position and dimension editing.
+
+Furniture movement must work in both 2D and 3D modes.
+
+## 3.5 Furniture Dimensions and Clearances
+
+Every furniture item must have:
+- Width.
+- Depth.
+- Height.
+- Position.
+- Rotation.
+- 2D footprint.
+- 3D geometry.
+- Collision boundary.
+
+Check:
+- Furniture-to-furniture collision.
+- Furniture-to-wall collision.
+- Door opening clearance.
+- Wardrobe and drawer clearance.
+- Walking paths.
+- Bed access.
+- Kitchen working space.
+- Refrigerator door clearance.
+- Dining chair movement.
+- Bathroom fixture clearance.
+- Window access.
+- Staircase clearance.
+
+Use object-specific clearance rules rather than treating every object as a simple box.
+
+---
+
+# PART 4 — BUILT-IN FURNITURE, CUSTOM DESIGN CATALOG AND ARCHITECTURAL ELEMENTS
+
+Add a dedicated system for furniture integrated into the building, not just movable furniture.
+
+Create four catalog categories.
+
+## 4.1 Ready-Made Furniture
+
+Include:
+- Beds.
+- Sofas.
+- Tables.
+- Chairs.
+- Wardrobes.
+- Cabinets.
+- Bookshelves.
+- Kitchen appliances.
+- Bathroom fixtures.
+- Laundry equipment.
+
+## 4.2 Built-in Furniture
+
+Include templates such as:
+- Built-in wardrobes.
+- Recessed wardrobes.
+- Wall-mounted desks.
+- Built-in study desks.
+- Wall-mounted cabinets.
+- Recessed wall shelving.
+- Built-in TV cabinets.
+- Built-in TV walls.
+- Built-in kitchen cabinets.
+- Built-in pantry cabinets.
+- Under-stair storage.
+- Built-in beds.
+- Window seating with storage.
+- Built-in benches.
+- Wall-mounted folding tables.
+- Built-in laundry cabinets.
+
+## 4.3 Custom Furniture
+
+Allow users to create:
+- L-shaped and U-shaped sofas.
+- Custom beds.
+- Custom desks.
+- Custom wardrobes.
+- Custom shelves.
+- Custom cabinets.
+- Custom kitchen counters.
+- Modular storage.
+- Irregular and polygon-shaped furniture.
+
+## 4.4 Architectural Interior Elements
+
+Include:
+- Wall niches.
+- Recessed shelving.
+- Decorative partitions.
+- Feature walls.
+- Built-in TV feature walls.
+- Wall panels.
+- Raised platforms.
+- Integrated storage walls.
+- Decorative wall openings.
+- Other configurable interior elements.
+
+## 4.5 Parametric Customization
+
+Each catalog item must support relevant editable parameters.
+
+Examples:
+
+**Built-in Wardrobe**
+- Width.
+- Height.
+- Depth.
+- Number of compartments.
+- Number of shelves.
+- Hanging sections.
+- Drawer sections.
+- Swing or sliding doors.
+- Internal storage layout.
+- Material and finish.
+
+**Wall-Mounted Desk**
+- Width.
+- Depth.
+- Height.
+- Tabletop thickness.
+- Mounting height.
+- Bracket or support configuration.
+- Optional drawers.
+- Optional shelves.
+- Foldable or fixed configuration.
+
+**Wall-Mounted Cabinet**
+- Width.
+- Height.
+- Depth.
+- Door configuration.
+- Shelf configuration.
+- Mounting position.
+- Material and finish.
+
+The 3D model must update automatically when dimensions or parameters change.
+
+## 4.6 Wall Attachment and Integration
+
+Built-in furniture must support attachment relationships.
+
+Allow users to:
+- Select a host wall.
+- Attach furniture to the wall.
+- Position it horizontally and vertically.
+- Set distance from the floor.
+- Set mounting depth.
+- Set recess depth.
+- Attach furniture to the floor or ceiling where appropriate.
+- Move furniture along its host wall.
+- Detach it intentionally.
+
+Distinguish between:
+1. Wall-mounted furniture.
+2. Floor-mounted furniture.
+3. Recessed furniture.
+4. Integrated architectural elements.
+5. Freestanding furniture.
+
+For recessed wardrobes and wall niches, represent the actual wall recess or opening, not just a box placed on top of the wall.
+
+If the host wall moves:
+- Update attached furniture position.
+- Preserve its attachment relationship.
+- Recalculate relevant dimensions.
+- Detect invalid attachments.
+- Warn if the wall is deleted or no longer supports the furniture.
+
+Do not leave built-in furniture floating in space.
+
+## 4.7 Custom Furniture Builder
+
+Create a dedicated Custom Furniture Builder.
+
+Users can start from:
+- Blank object.
+- Existing catalog template.
+- Existing furniture object.
+
+Support:
+- Polygon footprint editing.
+- Adding, deleting, and moving vertices.
+- Editing object height.
+- Creating multiple connected sections.
+- Adding shelves, drawers, doors, and panels.
+- Setting material and finish.
+- Editing dimensions numerically.
+- Saving designs as reusable templates.
+
+For modular furniture, allow modules to be added, removed, resized, and rearranged independently.
+
+## 4.8 My Custom Catalog
+
+Create a personal reusable catalog called **My Custom Catalog**.
+
+Users can save custom furniture designs and reuse them in other rooms.
+
+Store:
+- Custom design name.
+- Furniture category.
+- Geometry.
+- Dimensions.
+- Parameters.
+- Materials.
+- Attachment type.
+- Preview image, if available.
+
+Allow:
+- Rename.
+- Duplicate.
+- Edit.
+- Delete.
+- Reuse in another room.
+- Save a new version without overwriting the previous template unless explicitly requested.
+
+For example, a wardrobe designed for Bedroom 1 can be saved and reused in Bedroom 2 with different dimensions.
+
+## 4.9 Material and Cost Configuration
+
+Allow assigning materials to individual furniture components.
+
+Examples:
+- Plywood.
+- MDF.
+- Solid wood.
+- HPL laminate.
+- Veneer.
+- Glass.
+- Aluminum.
+- Steel.
+- Stone or engineered stone.
+- Other configurable materials.
+
+For built-in furniture, estimate:
+- Material quantity.
+- Panel area.
+- Hardware requirements.
+- Fabrication cost.
+- Installation cost.
+- Total estimated cost.
+
+Allow users to enter their own material and labor prices.
+
+Clearly label calculations as estimates.
+
+## 4.10 Furniture Validation
+
+Check:
+- Furniture dimensions against wall dimensions.
+- Furniture depth against room circulation.
+- Door and window conflicts.
+- Wall opening conflicts.
+- Furniture collision.
+- Ceiling clearance.
+- Drawer and door opening space.
+- Staircase and under-stair storage clearance.
+- Wall attachment validity.
+
+Distinguish decorative recesses from structural wall modifications.
+
+Do not claim structural safety based only on geometric checks.
+
+---
+
+# PART 5 — BUILDING FLOOR RELATIONSHIPS AND RESTRICTED ZONE EDITING
+
+There is a synchronization issue between the existing ground-floor building and second-floor building components.
+
+When the existing ground-floor building is moved, the relevant second-floor components do not follow.
+
+Inspect and fix the building relationship model.
+
+## 5.1 Building Component Hierarchy
+
+Create a hierarchy for:
+- Building.
+- Floor.
+- Building section.
+- Room.
+- Wall.
+- Door.
+- Window.
+- Roof.
+- Staircase.
+- Furniture.
+- Restricted zone.
+
+Each object must have a unique ID and appropriate parent or dependency relationship.
+
+## 5.2 Linked and Independent Components
+
+Support two relationship types.
+
+**Linked Components**
+- Physically or geometrically dependent on another building section.
+- Their position and relevant geometry update when their parent changes.
+
+**Independent Components**
+- Can be positioned and edited independently.
+- Must not automatically move with unrelated building components.
+
+Example:
+- If an existing ground-floor building section moves, its corresponding upper-floor component follows if configured as linked.
+- A separate extension with its own footprint and structural system remains independent.
+
+Provide:
+- Link component.
+- Unlink component.
+- Change parent component.
+- Move independently.
+- Reset to parent alignment.
+
+Do not automatically link all upper-floor components to the ground floor.
+
+## 5.3 Forbidden Zone and Building Footprint Editing
+
+The current second-floor restricted zone / forbidden zone cannot be moved properly.
+
+Investigate why.
+
+Distinguish between:
+
+1. Forbidden Zone: an area where building construction is prohibited.
+2. Building Footprint: the actual building area.
+3. Restricted Area Overlay: an editable reference boundary.
+4. Independent Building Extension: a separate structure with its own footprint.
+
+Users must be able to:
+- Select each zone.
+- Move its boundary.
+- Resize it.
+- Edit its vertices.
+- Change dimensions.
+- Lock or unlock it.
+- Show or hide it.
+- Edit properties.
+
+A forbidden zone should act as a constraint or reference overlay, not as an invisible obstacle preventing unrelated editing.
+
+When a building overlaps a forbidden zone, display a warning and explain the conflict.
+
+Do not silently block movement.
+
+## 5.4 Geometry Synchronization
+
+When a component moves or resizes:
+- Update linked components.
+- Recalculate room dimensions and areas.
+- Update wall intersections.
+- Update the 3D model.
+- Update dependent furniture where appropriate.
+- Recalculate feasibility warnings.
+
+Provide undo and redo.
+
+---
+
+# PART 6 — FULL INTERIOR 3D EXPLORATION AND WALKTHROUGH
+
+The current 3D model mainly displays the exterior. Upgrade it to support complete interior exploration.
+
+The current walkthrough also does not allow the user to enter the house. Debug and fix the underlying navigation implementation.
+
+## 6.1 Multiple Viewing Modes
+
+Implement:
+1. Exterior View.
+2. Dollhouse / Cutaway View.
+3. Interior Room View.
+4. First-Person Walkthrough.
+5. Top-Down View.
+6. Isometric View.
+7. Horizontal and Vertical Section Views.
+
+## 6.2 Building Visibility Controls
+
+Allow independent visibility control for:
+- Roof.
+- Exterior walls.
+- Interior partition walls.
+- Ground floor slab.
+- Second floor slab.
+- Doors.
+- Windows.
+- Ceiling.
+- Furniture.
+- Staircase.
+
+Support Show, Hide, and Transparent modes where applicable.
+
+Hiding an object must never delete or modify the building model.
+
+## 6.3 Floor Navigation
+
+Provide:
+- Ground Floor.
+- Second Floor.
+- Both Floors.
+
+Allow users to inspect each floor independently or the entire building in dollhouse mode.
+
+## 6.4 Room-by-Room Interior Editing
+
+Users can click a room in 2D or 3D and enter its dedicated interior view.
+
+Allow:
+- 360-degree camera rotation.
+- Zoom in and out.
+- Furniture inspection.
+- Wall, floor, and ceiling material changes.
+- Lighting fixture placement.
+- Daylight and artificial lighting preview.
+- Furniture movement and customization.
+- Saving alternative room arrangements.
+
+All changes must synchronize with the overall building model.
+
+## 6.5 First-Person Walkthrough
+
+Implement actual interior navigation.
+
+Desktop:
+- W / Up Arrow: Forward.
+- S / Down Arrow: Backward.
+- A / Left Arrow: Left.
+- D / Right Arrow: Right.
+- Mouse: Look around.
+- Escape: Exit walkthrough.
+
+Mobile:
+- On-screen movement joystick.
+- Touch camera rotation.
+- Accessible exit button.
+
+Allow users to select a starting point:
+- Front terrace.
+- Main entrance.
+- Guest living room.
+- Family room.
+- Selected room.
+- Second-floor landing.
+
+The camera must not spawn inside walls, furniture, below the floor, or outside unintentionally.
+
+## 6.6 Collision and Navigation
+
+The walkthrough must:
+- Prevent walking through solid walls.
+- Prevent walking through furniture.
+- Allow passage through actual door openings.
+- Allow navigation through corridors.
+- Allow movement between connected rooms.
+- Allow staircase navigation between floors.
+- Respect floor elevations.
+
+Do not create collision boundaries that block all doorways.
+
+Build navigable areas from actual room and doorway geometry.
+
+Use navigation meshes, room connectivity graphs, or equivalent techniques.
+
+Ensure the staircase connects the ground and second-floor navigation regions.
+
+Before starting, validate:
+- Room boundaries.
+- Door openings.
+- Floor connectivity.
+- Staircase connectivity.
+- Camera spawn points.
+- Navigation geometry.
+
+If a room is inaccessible, explain why.
+
+---
+
+# PART 7 — ARCHITECTURAL RULES AND FEASIBILITY CHECKER
+
+Create an architectural guidance module.
+
+It must provide configurable design rules and preliminary feasibility checks.
+
+## 7.1 Architectural Reference Library
+
+Include:
+- Staircase width.
+- Tread depth.
+- Riser height.
+- Landing dimensions.
+- Headroom.
+- Balcony dimensions.
+- Door widths.
+- Corridor widths.
+- Bathroom dimensions.
+- Bedroom dimensions.
+- Kitchen working clearance.
+- Ceiling height.
+- Window and ventilation requirements.
+- Natural lighting.
+- Accessibility considerations.
+
+For each rule, display:
+- Recommended value or range.
+- Minimum value, where applicable.
+- Source or regulatory reference.
+- Applicability.
+- Whether it is a legal requirement, design recommendation, or general guideline.
+
+Do not present recommendations as mandatory legal requirements.
+
+## 7.2 Staircase Assistant
+
+When adding or editing a staircase, calculate:
+- Available footprint.
+- Staircase width.
+- Riser height.
+- Tread depth.
+- Number of steps.
+- Landing dimensions.
+- Headroom.
+- Floor-to-floor height.
+- Total staircase length.
+- Staircase slope.
+
+Support straight, L-shaped, and U-shaped configurations.
+
+Show whether the staircase fits within the available space and explain any issues.
+
+## 7.3 Balcony Assistant
+
+Evaluate:
+- Width and depth.
+- Usable circulation.
+- Door access.
+- Furniture clearance.
+- Railing considerations.
+- Privacy.
+- Drainage.
+- Waterproofing.
+- Preliminary structural warnings.
+
+## 7.4 Site Planning and Local Regulations
+
+The project location is:
+
+Kabupaten Padang Pariaman, Sumatera Barat, Indonesia.
+
+Provide a configurable regulatory profile for this location.
+
+Include:
+- Plot boundaries.
+- Front setback.
+- Rear setback.
+- Left-side setback.
+- Right-side setback.
+- Building footprint.
+- KDB.
+- KLB.
+- KDH.
+- Maximum building height.
+- Buildable area.
+
+Do not hardcode one universal setback value.
+
+Applicable requirements may depend on:
+- Kecamatan.
+- Nagari.
+- Zoning and subzone.
+- RDTR and applicable spatial plans.
+- Road classification and width.
+- Building use and classification.
+- Applicable PBG and local requirements.
+
+Allow users to enter or verify the applicable values.
+
+For Indonesian projects, support relevant local regulatory references and verification status.
+
+Never invent a legal setback value or claim regulatory compliance without sufficient evidence.
+
+Every regulatory value should have a source, date, and verification status.
+
+## 7.5 Structural and Construction Warnings
+
+Provide preliminary warnings for:
+- Large unsupported openings.
+- Long wall spans.
+- Unusual cantilevers.
+- Second-floor additions above existing structures.
+- Staircase openings through existing slabs.
+- Heavy rooftop structures.
+- Balcony extensions.
+- Potentially problematic beam and column arrangements.
+
+These checks are preliminary alerts only.
+
+Do not claim structural safety certification.
+
+Structural calculations must be verified by qualified professionals.
+
+## 7.6 Room Functionality Evaluation
+
+Evaluate:
+- Bedroom: bed access, wardrobe access, circulation, window access.
+- Kitchen: working triangle, counter space, refrigerator access.
+- Bathroom: toilet clearance, shower space, door access.
+- Laundry: washing machine access, ventilation, drying access.
+- Living room: seating arrangement and circulation.
+- Balcony: usable space, access, safety, and drainage.
+
+Provide clear explanations and practical improvement suggestions.
+
+## 7.7 Design Evaluation Dashboard
+
+Display:
+- Geometry validity.
+- Room functionality.
+- Furniture fit.
+- Circulation.
+- Natural lighting.
+- Ventilation.
+- Privacy.
+- Accessibility.
+- Preliminary architectural feasibility.
+- Regulatory checklist.
+- Construction complexity.
+
+Use statuses:
+- Good.
+- Needs Attention.
+- Potential Conflict.
+- Requires Professional Verification.
+
+Scores must be explainable and must not imply engineering certification.
+
+---
+
+# PART 8 — MATERIALS, INTERIOR STYLING AND COST ESTIMATION
+
+Provide material and finishing options for:
+- Walls.
+- Floors.
+- Ceilings.
+- Doors.
+- Windows.
+- Furniture.
+- Kitchen countertops.
+- Cabinets.
+- Bathroom surfaces.
+- Exterior walls.
+- Roof.
+
+Allow:
+- Color selection.
+- Material selection.
+- Texture preview.
+- Daylight simulation.
+- Artificial lighting.
+- Day and night visualization.
+
+Estimate costs for:
+- Furniture.
+- Built-in furniture.
+- Materials.
+- Finishes.
+- Fabrication.
+- Installation.
+
+Allow users to input local prices.
+
+Clearly label all calculations as estimates and state the assumptions.
+
+---
+
+# PART 9 — DATA MODEL, VERSION MANAGEMENT AND SYNCHRONIZATION
+
+Maintain one consistent underlying building model.
+
+The same source data must drive:
+- 2D floor plans.
+- 3D exterior.
+- 3D interior.
+- Building sections.
+- Furniture layouts.
+- Room dimensions.
+- Area calculations.
+- Feasibility analysis.
+
+Maintain:
+1. Original Approved Design — read-only.
+2. Working Design — editable.
+3. Alternative Designs — separately saved versions.
+
+Provide:
+- Undo and redo.
+- Autosave.
+- Version history.
+- Duplicate design.
+- Compare alternatives.
+- Restore previous versions.
+
+When geometry changes, recalculate affected dimensions, room areas, furniture clearances, and 3D geometry.
+
+Preserve compatibility with existing project data.
+
+---
+
+# PART 10 — USER INTERFACE
+
+Keep the existing application's design language where possible.
+
+Provide an intuitive workspace containing:
+
+- 2D Floor Plan Editor.
+- 3D Exterior.
+- 3D Interior.
+- Dollhouse / Cutaway.
+- Section View.
+- Furniture Library.
+- Built-in Furniture Library.
+- Custom Furniture Builder.
+- My Custom Catalog.
+- Materials Library.
+- Architectural Rules.
+- Feasibility Dashboard.
+- Dimension and Properties Panel.
+- Layer and Visibility Panel.
+
+When a room is selected, show:
+- Room name.
+- Dimensions.
+- Polygon geometry.
+- Area.
+- Wall thickness.
+- Floor material.
+- Ceiling height.
+- Furniture list.
+- Feasibility warnings.
+
+When furniture is selected, show:
+- Object name.
+- Category.
+- Width.
+- Depth.
+- Height.
+- Position.
+- Rotation.
+- Geometry.
+- Material.
+- Host wall or attachment.
+- Clearance warnings.
+
+Make the interface usable on desktop first, while retaining responsive tablet support.
+
+---
+
+# PART 11 — TECHNICAL IMPLEMENTATION
+
+Inspect and extend the existing architecture.
+
+Suggested technologies:
+- React and TypeScript.
+- React-Konva or equivalent for 2D editing.
+- Three.js / React Three Fiber for 3D.
+- Zustand or equivalent state management.
+- Polygon geometry engine.
+- Constraint and validation engine.
+- Raycasting for 3D object selection.
+- Collision detection for walkthrough.
+- GLB/GLTF support for furniture models.
+
+Use one consistent building data model.
+
+Avoid storing duplicate room or furniture geometry independently in multiple views.
+
+Handle coordinate conversion consistently between:
+- Site coordinates.
+- 2D floor plan coordinates.
+- 3D world coordinates.
+- Furniture local coordinates.
+
+Use metric units internally and allow display in meters and centimeters.
+
+Prioritize geometry correctness, data integrity, and functional interactions over decorative rendering.
+
+---
+
+# PART 12 — ACCEPTANCE TESTS
+
+Do not mark the task complete until these tests have been run.
+
+## A. Building Geometry
+1. Add a vertex to a rectangular room and convert it into an L-shaped room.
+2. Delete a vertex and verify geometry.
+3. Move a vertex and update connected walls.
+4. Resize a room from its left edge.
+5. Resize from its right edge.
+6. Resize from top and bottom.
+7. Resize symmetrically around its center.
+8. Verify dimensions and area recalculate.
+
+## B. Floor and Visibility
+9. Show only ground-floor furniture.
+10. Show only second-floor furniture.
+11. Show all floors.
+12. Hide all furniture without hiding building structure.
+13. Hide only laundry equipment.
+14. Show furniture in one selected room.
+
+## C. Custom Furniture
+15. Create an L-shaped sofa.
+16. Change both side lengths.
+17. Rotate and move the sofa.
+18. Verify its 2D footprint and 3D geometry remain synchronized.
+19. Create a U-shaped kitchen set.
+20. Save and reuse a custom furniture template.
+
+## D. Built-in Furniture
+21. Add a built-in wardrobe to a bedroom wall.
+22. Resize the wardrobe numerically.
+23. Add internal compartments and shelves.
+24. Attach a wall-mounted desk.
+25. Create a recessed wardrobe or wall niche.
+26. Create an L-shaped custom cabinet.
+27. Save a custom design to My Custom Catalog.
+28. Reuse it in another room.
+29. Move the host wall and verify the attached furniture updates.
+30. Verify invalid wall attachments generate warnings.
+
+## E. Building Relationships
+31. Move the existing ground-floor building.
+32. Verify linked second-floor components follow.
+33. Verify independent extension components do not move unintentionally.
+34. Move and resize the forbidden zone.
+35. Edit its vertices.
+36. Verify building overlap warnings update.
+
+## F. Interior 3D and Walkthrough
+37. Hide the roof and inspect the furnished interior.
+38. Display both floors in dollhouse mode.
+39. Isolate the second floor.
+40. Enter a bedroom and inspect furniture.
+41. Start walkthrough from the front entrance.
+42. Enter the guest living room.
+43. Walk through the family room to the kitchen.
+44. Enter a bedroom.
+45. Walk to the staircase.
+46. Navigate to the second floor.
+47. Enter a second-floor bedroom.
+48. Verify camera collision with solid walls.
+49. Verify passage through actual door openings.
+50. Exit walkthrough and return to the correct editing state.
+
+## G. Architectural Feasibility
+51. Create a staircase that does not fit and display a meaningful warning.
+52. Create a balcony and display dimensions and clearance checks.
+53. Configure site setbacks and flag building footprint violations.
+54. Change regulatory settings and verify the feasibility engine updates.
+55. Distinguish legal requirements, recommendations, and professional verification items.
+
+---
+
+# FINAL DEVELOPMENT INSTRUCTIONS
+
+First inspect the existing application and identify the current implementation and actual causes of existing bugs.
+
+Do not simply add buttons or static visual representations.
+
+Implement working interactions and test the acceptance criteria.
+
+Preserve the approved house design and all existing user data.
+
+Do not claim a feature works unless it has actually been implemented and tested.
+
+If a feature cannot be implemented reliably within the existing architecture:
+- Explain the technical limitation.
+- Identify the affected functionality.
+- Propose a safe implementation.
+- Do not silently omit the feature.
+
+At completion, provide a concise development report stating:
+1. Bugs fixed.
+2. Features implemented.
+3. Acceptance tests passed.
+4. Features remaining incomplete.
+5. Known limitations.
+6. Any recommended next development steps.
+
+The final objective is a genuinely editable architectural environment where users can reshape rooms, customize furniture, design built-in elements, inspect the building from inside, and receive meaningful architectural guidance while preserving the original approved house design.
