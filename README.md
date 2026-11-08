@@ -5,6 +5,8 @@
 
 **Plan the layout. Explore the space. Compare renovation ideas.**
 
+[Open the live application](https://house-plan-v-3.ai.studio/)
+
 A browser-based workspace for residential floor-plan design, 3D visualization, rule-based design reviews, and preliminary renovation cost planning.
 
 [![React](https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white)](https://react.dev/)
@@ -16,7 +18,7 @@ A browser-based workspace for residential floor-plan design, 3D visualization, r
 
 ---
 
-> **Project status:** Active development / portfolio project. The repository contains the application source code and planning tools. A public live demo and verified screenshots have not yet been added.
+> **Project status:** Active development / portfolio project. The live application is available through Google AI Studio. The public repository intentionally excludes private project plans, temporary AI Studio artifacts, and unverified personal image assets.
 
 ## At a glance
 
