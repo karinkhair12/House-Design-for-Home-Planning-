@@ -1,136 +1,176 @@
-# Griya — House Design & Renovation Planner
+<div align="center">
 
-A browser-based planning workspace for exploring residential floor plans, comparing renovation alternatives, reviewing basic architectural constraints, visualizing a house in 3D, and preparing preliminary construction cost estimates.
+# Griya
+### House Design & Renovation Planner
 
-This project began as a practical tool to help a family think through a home renovation before construction decisions are made. It combines interactive drawing tools with rule-based checks and planning references.
+**Plan the layout. Explore the space. Compare renovation ideas.**
 
-> **Important:** This application is a design-planning aid, not a substitute for an architect, structural engineer, licensed building professional, official permit review, or a site inspection. All dimensions, structural assumptions, regulatory interpretations, and cost estimates must be independently verified before construction.
+A browser-based workspace for residential floor-plan design, 3D visualization, rule-based design reviews, and preliminary renovation cost planning.
 
-## What it can do
+[![React](https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-7-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)](https://vite.dev/)
+[![Three.js](https://img.shields.io/badge/3D-Three.js-black?logo=threedotjs&logoColor=white)](https://threejs.org/)
 
-- **Interactive 2D floor-plan editor** — create and adjust room layouts, edit polygon vertices, work with dimensions and alignment guides, and manage doors, windows, and furniture.
-- **3D visualization** — inspect the proposed layout through a Three.js-based view.
-- **Design alternatives** — compare different layout options and review their trade-offs.
-- **Rule-based design checks** — evaluate selected geometric, circulation, architectural, ventilation, and planning constraints.
-- **Technical diagrams** — review supporting architectural and building-detail visualizations.
-- **Preliminary cost planning** — explore indicative material, labour, and construction-phase estimates.
-- **Site analysis and reporting** — review site assumptions and prepare a printable design summary.
-- **Local project persistence** — keep working designs in browser storage and export/import design data where supported by the application.
+</div>
 
-The exact checks and calculations are limited to the rules and assumptions implemented in the source code. A positive application result is not a structural safety certification.
+---
+
+> **Project status:** Active development / portfolio project. The repository contains the application source code and planning tools. A public live demo and verified screenshots have not yet been added.
+
+## At a glance
+
+Griya is a home-planning application built to help explore residential layouts and renovation possibilities in one place. It brings together a 2D floor-plan editor, a 3D view, design-checking utilities, and early-stage cost-planning tools.
+
+The project grew from a practical home-renovation planning need: make it easier to test layout ideas, understand spatial trade-offs, and organize design discussions before making real-world construction decisions.
+
+## Explore the features
+
+| Workspace | What it helps with |
+|---|---|
+| **2D Floor Plan Editor** | Create and edit room layouts, adjust polygon vertices, work with dimensions and alignment guides, and place doors, windows, and furniture. |
+| **3D Visualization** | Explore the designed layout in a Three.js-powered 3D view. |
+| **Design Alternatives** | Keep and compare different layout options and understand their trade-offs. |
+| **Rule-based Design Review** | Check selected geometric, circulation, architectural, ventilation, and planning constraints implemented in the application. |
+| **Technical Diagrams** | Review supporting architectural and building-detail visualizations. |
+| **Preliminary Cost Planning** | Explore indicative material, labour, and construction-phase cost estimates. |
+| **Site Analysis & Reports** | Organize site assumptions and prepare a printable design summary. |
+| **Design Persistence & Sharing** | Continue working with browser-stored designs and use import/export or share workflows where supported. |
+
+## Screenshots
+
+Screenshots of the current application interface will be added here after a final visual review. This keeps the project page focused on genuine application captures rather than illustrative images that may not represent the current UI.
+
+<!-- Suggested captures:
+1. Main application dashboard
+2. 2D floor-plan editor with room dimensions and editing tools
+3. 3D visualization
+4. Design comparison or preliminary cost-planning view
+-->
 
 ## Technology
 
-- React 19
-- TypeScript
-- Vite
-- Three.js
-- Tailwind CSS 4
-- Lucide React
-- Motion
-- Bun (lockfile: `bun.lock`)
-- Google GenAI SDK dependency (AI Studio integration)
+- **Frontend:** React 19, TypeScript
+- **Build tooling:** Vite
+- **3D:** Three.js
+- **Styling:** Tailwind CSS 4
+- **Icons:** Lucide React
+- **Motion:** Motion
+- **Package manager:** Bun
+- **AI integration dependency:** Google GenAI SDK
 
-## Getting started
+## Run locally
 
 ### Requirements
 
 - [Bun](https://bun.sh/) installed
-- A modern browser with WebGL support for the 3D view
+- A modern browser
+- WebGL support for the 3D workspace
 
-### Install dependencies
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/karinkhair12/House-Design-for-Home-Planning-.git
+cd House-Design-for-Home-Planning-
+```
+
+### 2. Install dependencies
 
 ```bash
 bun install
 ```
 
-### Configure environment
+### 3. Configure environment variables
 
-Copy `.env.example` to `.env.local` only if your local runtime requires these variables, then replace placeholders with values supplied through a secure environment-variable manager.
+If your local runtime requires environment variables, copy the example file:
 
 ```bash
 cp .env.example .env.local
 ```
 
-Never commit `.env.local`, real API keys, access tokens, or credentials. The example file contains placeholders only. Do not expose a Gemini API key through a client-side variable such as `VITE_GEMINI_API_KEY`: Vite-prefixed variables are bundled for browser access.
+Replace placeholders with values provided through a secure environment-variable manager. Never commit `.env.local`, API keys, access tokens, or credentials.
 
-When running through Google AI Studio, follow its Secrets configuration for server-side credentials. Do not copy secrets into source files or public assets.
+**Security note:** Variables prefixed with `VITE_` are exposed to browser code. Never put a private Gemini API key or another secret in a Vite client-side variable. Configure credentials through Google AI Studio Secrets or a suitable server-side secret manager.
 
-### Run locally
+### 4. Start the development server
 
 ```bash
 bun run dev
 ```
 
-Vite is configured to listen on port `3000`. Open the local URL printed by Vite in your terminal.
+Vite is configured to use port `3000`. Open the local URL printed in the terminal.
 
-### Type-check
+### 5. Check and build
 
 ```bash
 bun run lint
-```
-
-### Production build
-
-```bash
 bun run build
 bun run preview
 ```
 
-The current package scripts do not define a dedicated test command. Test files are present under `src/utils/*.test.ts`; a repeatable test script and CI workflow should be added after confirming the preferred runner and runtime.
+The current package scripts provide TypeScript checking through `lint` and a Vite production build. Test files exist in `src/utils/`, but a dedicated test script is not currently defined in `package.json`.
 
-## Repository structure
+## Project structure
 
 ```text
 .
 ├── public/
-│   └── assets/             # Images and static assets used by the app
+│   └── assets/              # Static assets used by the application
 ├── src/
-│   ├── components/         # Main application views and UI components
-│   ├── utils/              # Geometry, design data, evaluation and cost logic
-│   ├── App.tsx             # Application shell and top-level state
+│   ├── components/          # Application views and UI components
+│   ├── utils/               # Geometry, design data, evaluation and cost logic
+│   ├── App.tsx              # Application shell and top-level state
 │   ├── index.css
 │   └── main.tsx
 ├── docs/
-│   ├── ARCHITECTURE.md     # High-level codebase guide
-│   └── SECURITY.md         # Secret-handling and security notes
+│   ├── ARCHITECTURE.md      # High-level codebase guide
+│   └── SECURITY.md          # Secret-handling and privacy notes
 ├── .env.example
 ├── .gitignore
-├── metadata.json          # Google AI Studio app metadata
+├── metadata.json           # Google AI Studio app metadata
 ├── package.json
 └── bun.lock
 ```
 
-## Design data and privacy
+## Important limitations
 
-Working designs are stored in the browser's `localStorage`. This is convenient for a single-browser workflow, but it is not a cloud backup or a secure multi-user database. Clearing browser data can remove locally stored work. Use the application's export/backup capability where available and store exported files somewhere private.
+Griya is a **design-planning aid**, not a professional engineering or regulatory approval tool.
 
-Sharing data through URLs can expose the encoded design to anyone who receives or can access that URL. Avoid putting addresses, names, contact details, or other sensitive information into shared design payloads.
+- Design checks are rule-based and limited to the conditions implemented in the code.
+- A positive score or passed check does **not** certify structural safety or building-code compliance.
+- Structural decisions, load paths, foundations, reinforcement, and construction details must be reviewed by qualified professionals.
+- Cost estimates are indicative. Actual costs depend on location, date, quantities, specifications, labour rates, and project scope.
+- Site assumptions and dimensions must be checked against the actual property.
+- The application has not been presented as a substitute for a site survey, architect, structural engineer, licensed building professional, or official permit review.
 
-See [docs/SECURITY.md](docs/SECURITY.md) for repository and runtime security guidance.
+## Privacy and security
 
-## Current limitations
+House plans, room dimensions, site layouts, and renovation photographs can reveal sensitive information about a household.
 
-- Design checks are rule-based and cover only the conditions implemented in the application.
-- Structural calculations are not a replacement for engineering analysis, structural drawings, or professional sign-off.
-- Cost figures are indicative and depend on the rates, location, date, scope, and assumptions encoded in the application.
-- Browser storage is device/browser-specific unless the user exports or shares a design.
-- A complete automated test and continuous-integration workflow has not yet been configured.
+- Do not publish private addresses, contact details, access information, or identifiable household data.
+- Browser `localStorage` is browser-specific and is not encrypted secret storage or a cloud backup.
+- Treat shared URLs and exported design files as potentially accessible to anyone who receives them.
+- Treat imported JSON and URL payloads as untrusted input.
+- Never commit credentials or real environment files.
 
-## Development notes
+See [Security Notes](docs/SECURITY.md) for more details.
 
-The application has a broad feature set. Some UI modules, especially the interactive floor-plan editor, are large and would benefit from incremental refactoring into smaller components and hooks. Refactoring should be accompanied by regression tests for geometry editing, snapping, undo/redo, import/export, doors/windows, and 2D/3D synchronization.
+## Developer documentation
 
-## Contributing
+- [Architecture Overview](docs/ARCHITECTURE.md)
+- [Security Notes](docs/SECURITY.md)
 
-For changes that affect geometry, dimensions, design evaluation, or cost calculations:
+## Roadmap
 
-1. Keep calculations deterministic and document assumptions.
-2. Add or update tests for edge cases and regression scenarios.
-3. Avoid presenting heuristic checks as certified engineering conclusions.
-4. Run type-checking and a production build before submitting changes.
-5. Never commit secrets, private house information, temporary AI artifacts, or generated build output.
+Potential engineering improvements as the project evolves:
+
+- [ ] Add reviewed screenshots and a public demo link.
+- [ ] Break the large floor-plan editor into smaller components and hooks.
+- [ ] Add schema validation for imported and shared design data.
+- [ ] Expand regression tests for geometry editing, snapping, undo/redo, doors/windows, and 2D/3D synchronization.
+- [ ] Add a repeatable automated test command and CI checks.
+- [ ] Document the source, location, and date of architectural assumptions and cost rates.
 
 ## License
 
-No repository-level license has been selected yet. Unless and until a license is added, the project should be treated as **all rights reserved**. The SPDX headers in source files do not by themselves replace a repository-level license or establish the licensing status of third-party assets.
+No repository-level license has been selected. Until a license is added, the project should be treated as **all rights reserved**. Source-file SPDX comments do not by themselves replace a repository-level license or establish redistribution rights for third-party assets.
