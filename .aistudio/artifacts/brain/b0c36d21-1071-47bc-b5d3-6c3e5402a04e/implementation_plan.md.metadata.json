@@ -1,6 +1,0 @@
-{
-  "summary": "Rencana Implementasi Penghapusan Jendela Kamar Sisi Kiri (KT 1 & KT 2) dan Penambahan Daftar Bukaan (Jendela & Pintu) di Panel Inspektur Ruang:\n- Menghapus jendela bawaan pada KT 2 Depan dan KT 1 Utama agar dinding kamar sisi kiri menjadi masif penuh di Editor 2D, 3D Aksonometri, dan data tersimpan.\n- Menambahkan seksi Daftar Bukaan Ruang (Jendela & Pintu Terpasang) di dalam Panel Inspektur Ruang saat ruangan diklik di Editor 2D, lengkap dengan indikator posisi dinding, ukuran, tombol pilih/edit cepat, dan tombol hapus 1-klik.",
-  "updatedAt": "2026-11-05T11:27:34.452751655Z",
-  "requestFeedback": true,
-  "userFacing": true
-}
