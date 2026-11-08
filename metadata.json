@@ -1,6 +1,6 @@
 {
   "name": "House Plan v.3",
-  "description": "Comprehensive architectural renovation concept and two-storey extension design for 9m x 11m Indonesian residential parcel with 3D axonometrics, CAD floor plans, and RAB cost estimation.",
+  "description": "Interactive residential floor-plan planning and renovation concept application with 2D editing, 3D visualization, design checks, and preliminary cost estimation.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
